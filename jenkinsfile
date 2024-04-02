@@ -1,0 +1,84 @@
+pipeline {
+    agent any
+    environment {
+        name = "meet" 
+    }
+    parameters {
+        string(name: 'Person' , defaultValue: 'mitin sohaliya' , description: 'who are you???')
+        booleanParam(name: 'isMale' , defaultValue: true, description: "" )
+        choice(name: 'choose' , choices: [ 'jaipur' , 'amreli' , 'surat' ], description: "" )
+    }
+    stages {
+        stage('run a command') {
+            steps {
+                echo 'Hello test'
+                bat '''
+                date /T
+                '''
+            }
+        }
+         stage('env variable') {
+             environment {
+                 username = "mitin sohaliya"
+             }
+            steps {
+                echo "${BUILD_ID}"
+                echo "${name}"
+                echo "${username}"
+            }
+        }
+         stage('parameters') {
+             
+            steps {
+                echo 'Hello test deploy'
+                echo "${Person}"
+                echo "${isMale}"
+                echo "${choose}"
+            }
+        }
+         stage('continue ?') {
+            input {
+                message " Should we continue ?"
+                ok "Yes we should "
+            }
+            steps {
+                echo 'Hello prod deploy'
+            }
+        }
+        
+         stage('deploy on prod') {
+            steps {
+                echo2 'Hello prod deploy'
+            }
+         
+            post { 
+                always { 
+                    echo 'I will always say Hello again!'
+                }
+                failure { 
+                    echo 'fail'
+                }
+                success { 
+                    echo 'success'
+                }
+            }  
+         }
+    }
+    post { 
+        always { 
+            echo 'I will always say Hello again!'
+        }
+        failure { 
+            echo 'fail'
+        }
+        success { 
+            echo 'success'
+        }
+        aborted { 
+            echo 'aborted'
+        }
+    }
+    
+}
+
+
