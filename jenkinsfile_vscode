@@ -28,7 +28,7 @@ pipeline{
                 success{
                     echo "========B executed successfully========"
                 }
-        C       failure{
+                failure{
                     echo "========B execution failed========"
                 }
             }
