@@ -1,0 +1,80 @@
+pipeline{
+    agent any
+    stages{
+        stage("A"){
+            steps{
+                echo "========executing A========"
+            }
+            post{
+                always{
+                    echo "========always========"
+                }
+                success{
+                    echo "========A executed successfully========"
+                }
+                failure{
+                    echo "========A execution failed========"
+                }
+            }
+        }
+        stage("B"){
+            steps{
+                echo "========executing B========"
+            }
+            post{
+                always{
+                    echo "========always========"
+                }
+                success{
+                    echo "========B executed successfully========"
+                }
+        C       failure{
+                    echo "========B execution failed========"
+                }
+            }
+        }
+        stage("C"){
+            steps{
+                echo "========executing C========"
+            }
+            post{
+                always{
+                    echo "========always========"
+                }
+                success{
+                    echo "========C executed successfully========"
+                }
+                failure{
+                    echo "========C execution failed========"
+                }
+            }
+        }
+        stage("D"){
+            steps{
+                echo "========executing D========"
+            }
+            post{
+                always{
+                    echo "========always========"
+                }
+                success{
+                    echo "========D executed successfully========"
+                }
+                failure{
+                    echo "========D execution failed========"
+                }
+            }
+        }
+    }
+    post{
+        always{
+            echo "========always========"
+        }
+        success{
+            echo "========pipeline executed successfully ========"
+        }
+        failure{
+            echo "========pipeline execution failed========"
+        }
+    }
+}
