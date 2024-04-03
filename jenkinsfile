@@ -1,84 +1,87 @@
-pipeline {
+pipeline{
     agent any
-    environment {
-        name = "meet" 
+    tools {
+        maven  'M2_HOME'
+        // tool name: 'M2_HOME', type: 'maven'
     }
-    parameters {
-        string(name: 'Person' , defaultValue: 'mitin sohaliya' , description: 'who are you???')
-        booleanParam(name: 'isMale' , defaultValue: true, description: "" )
-        choice(name: 'choose' , choices: [ 'jaipur' , 'amreli' , 'surat' ], description: "" )
-    }
-    stages {
-        stage('run a command') {
-            steps {
-                echo 'Hello test'
-                bat '''
-                date /T
-                '''
+    stages{
+        stage("Test"){
+            steps{
+                echo "========executing Test========"
+                sh 'mvn test'
             }
-        }
-         stage('env variable') {
-             environment {
-                 username = "mitin sohaliya"
-             }
-            steps {
-                echo "${BUILD_ID}"
-                echo "${name}"
-                echo "${username}"
-            }
-        }
-         stage('parameters') {
-             
-            steps {
-                echo 'Hello test deploy'
-                echo "${Person}"
-                echo "${isMale}"
-                echo "${choose}"
-            }
-        }
-         stage('continue ?') {
-            input {
-                message " Should we continue ?"
-                ok "Yes we should "
-            }
-            steps {
-                echo 'Hello prod deploy'
-            }
-        }
-        
-         stage('deploy on prod') {
-            steps {
-                echo2 'Hello prod deploy'
-            }
-         
-            post { 
-                always { 
-                    echo 'I will always say Hello again!'
+            post{
+                always{
+                    echo "========always========"
                 }
-                failure { 
-                    echo 'fail'
+                success{
+                    echo "========A executed successfully========"
                 }
-                success { 
-                    echo 'success'
+                failure{
+                    echo "========A execution failed========"
                 }
-            }  
-         }
+            }
+        }
+        stage("build"){
+            steps{
+                echo "========executing build========"
+                sh 'mvn package'
+                archiveArtifacts artifacts: '**/*.war', followSymlinks: false
+            }
+            post{
+                always{
+                    echo "========always========"
+                }
+                success{
+                    echo "========B executed successfully========"
+                }
+                failure{
+                    echo "========B execution failed========"
+                }
+            }
+        }
+        stage("C"){
+            steps{
+                echo "========executing C========"
+            }
+            post{
+                always{
+                    echo "========always========"
+                }
+                success{
+                    echo "========C executed successfully========"
+                }
+                failure{
+                    echo "========C execution failed========"
+                }
+            }
+        }
+        stage("D"){
+            steps{
+                echo "========executing D========"
+            }
+            post{
+                always{
+                    echo "========always========"
+                }
+                success{
+                    echo "========D executed successfully========"
+                }
+                failure{
+                    echo "========D execution failed========"
+                }
+            }
+        }
     }
-    post { 
-        always { 
-            echo 'I will always say Hello '
+    post{
+        always{
+            echo "========alway   ========"
         }
-        failure { 
-            echo 'fail'
+        success{
+            echo "========pipeline executed successfully ========"
         }
-        success { 
-            echo 'success'
-        }
-        aborted { 
-            echo 'aborted'
+        failure{
+            echo "========pipeline execution failed========"
         }
     }
-    
 }
-
-
