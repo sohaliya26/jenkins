@@ -1,9 +1,11 @@
 pipeline{
     agent any
+    tool name: 'M2_HOME', type: 'maven'
     stages{
-        stage("A"){
+        stage("Test"){
             steps{
-                echo "========executing A========"
+                echo "========executing Test========"
+                sh 'mvn test'
             }
             post{
                 always{
@@ -17,9 +19,11 @@ pipeline{
                 }
             }
         }
-        stage("B"){
+        stage("build"){
             steps{
-                echo "========executing B========"
+                echo "========executing build========"
+                sh 'mvn package'
+                archiveArtifacts artifacts: '**/*.war', followSymlinks: false
             }
             post{
                 always{
